@@ -1,5 +1,5 @@
 /*
- *  C++ source file for module cuso.wrppr
+ *  C++ source file for module cuso.wrppr_cu
  */
 
 
@@ -7,11 +7,12 @@
 // The example below is modified after http://people.duke.edu/~ccc14/cspy/18G_C++_Python_pybind11.html#More-on-working-with-numpy-arrays
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
+
 namespace py = pybind11;
-
 #include <iostream>
-
 #include <ArrayInfo.hpp>
+
+#include "culib/culib.hpp"
 
 void
 add ( py::array_t<double> x
@@ -31,18 +32,17 @@ add ( py::array_t<double> x
     double       *ptrz = az. data();
 
     size_t n = ax.shape(0);
-    
-    for( size_t i=0; i<n; i++ )
-        ptrz[i] = ptrx[i] + ptry[i];
-    
+    // for (size_t i = 0; i < bufx.shape[0]; i++)
+    //     ptrz[i] = ptrx[i] + ptry[i];
+    culib_add(ptrx, ptry, ptrz, n);
     for( size_t i=0; i<n; ++i )
         std::cout<<i<<' '<<ptrx[i]<<' '<<ptry[i]<<' '<<ptrz[i]<<std::endl;
 }
 
 
-PYBIND11_MODULE(wrppr, m)
+PYBIND11_MODULE(wrppr_cu, m)
 {// optional module doc-string
-    m.doc() = "pybind11 wrppr plugin"; // optional module docstring
+    m.doc() = "pybind11 wrppr_cu plugin"; // optional module docstring
  // list the functions you want to expose:
  // m.def("exposed_name", function_pointer, "doc-string for the exposed function");
     m.def("add", &add, "A function which adds two arrays 'x' and 'y' and stores the result in the third, 'z'.");

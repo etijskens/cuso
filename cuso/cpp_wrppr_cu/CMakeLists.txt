@@ -1,5 +1,5 @@
 #-------------------------------------------------------------------------------
-# Build C++ module cuso.wrppr
+# Build C++ module cuso.wrppr_cu
 #   > cd _cmake_build
 # For a clean build:
 #   > rm -rf *
@@ -19,27 +19,27 @@
 
 
 #<< begin boilerplate code
-    cmake_minimum_required(VERSION 3.4)
-  # Find pybind11_DIR, if python can be found...
-  # (that is we assume that the virtual environment is activated)
-    project(wrppr CXX)
-    find_program(
-        PYTHON_EXECUTABLE
-        NAMES python
+cmake_minimum_required(VERSION 3.4)
+# Find pybind11_DIR, if python can be found...
+# (that is we assume that the virtual environment is activated)
+  project(wrppr_cu CXX)
+  find_program(
+      PYTHON_EXECUTABLE
+      NAMES python
+  )
+  if(PYTHON_EXECUTABLE)
+    execute_process(
+        COMMAND "${PYTHON_EXECUTABLE}" -c "import site; print(site.getsitepackages()[0])"
+        OUTPUT_VARIABLE _site_packages
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
     )
-    if(PYTHON_EXECUTABLE)
-      execute_process(
-          COMMAND "${PYTHON_EXECUTABLE}" -c "import site; print(site.getsitepackages()[0])"
-          OUTPUT_VARIABLE _site_packages
-          OUTPUT_STRIP_TRAILING_WHITESPACE
-          ERROR_QUIET
-      )
-    else()
-      message(FATAL_ERROR "python executable not found.")
-    endif()
-    message("pybind11_DIR : ${pybind11_DIR}") # set in command line!
-  # now this will do fine:
-    find_package(pybind11 CONFIG REQUIRED)
+  else()
+    message(FATAL_ERROR "python executable not found.")
+  endif()
+  message("pybind11_DIR : ${pybind11_DIR}") # set in command line!
+# now this will do fine:
+  find_package(pybind11 CONFIG REQUIRED)
 #>> end boilerplate code
 
 ####################################################################################################
@@ -62,29 +62,30 @@ set(CMAKE_CXX_STANDARD 17)
 #     WM_DP                             # just define the macro
 # )
 
+add_subdirectory(culib)
 
 # Add include directories
 include_directories(
-    ../include
+  ../include
 )
 
 # Add link directories
-# link_directories(
-#     culib
-# )
+link_directories(
+  culib
+)
 
 # Add link libraries (lib1 -> liblib1.so)
-# link_libraries(
-#     culib
-# )
+link_libraries(
+  culib
+)
 ####################################################################################################
 
 #<< begin boilerplate code
-  # Create the target:
-    pybind11_add_module(wrppr wrppr.cpp)
+# Create the target:
+  pybind11_add_module(wrppr_cu wrppr_cu.cpp)
 
-    install(
-        FILES       "_cmake_build/wrppr${PYTHON_MODULE_EXTENSION}"
-        DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/.."
-    )
+  install(
+      FILES       "_cmake_build/wrppr_cu${PYTHON_MODULE_EXTENSION}"
+      DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/.."
+  )
 #>> end boilerplate code

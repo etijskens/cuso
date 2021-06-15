@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Tests for C++ module cuso.wrppr.
+Tests for C++ module cuso.wrppr_cu.
 """
 
 import os
@@ -17,7 +17,7 @@ cpp = cuso.wrppr
 
 
 def test_cpp_add():
-    assert cuso.pu == 'CPU'
+    assert cuso.pu == 'GPU NVIDIA';
     x = np.array([0,1,2,3,4],dtype=float)
     shape = x.shape
     y = np.ones (shape,dtype=float)

@@ -22,5 +22,29 @@
     },
     "API.rst": "\n.. include:: ../cuso/cpp_wrppr/wrppr.rst\n",
     "cuso/__init__.py": "\ntry:\n    import cuso.wrppr\nexcept ModuleNotFoundError as e:\n    # Try to build this binary extension:\n    from pathlib import Path\n    import click\n    from et_micc2.project import auto_build_binary_extension\n    msg = auto_build_binary_extension(Path(__file__).parent, 'wrppr')\n    if not msg:\n        import cuso.wrppr\n    else:\n        click.secho(msg, fg='bright_red')"
+  },
+  "wrppr_cu": {
+    "options": {
+      "verbosity": 1,
+      "project_path": "/data/antwerpen/201/vsc20170/gpu-workspace/cuso",
+      "default_project_path": true,
+      "clear_log": false,
+      "_cfg_filename": "micc2.cfg",
+      "_cfg_dir": "/user/antwerpen/201/vsc20170/.micc2",
+      "invoked_subcommand": "add",
+      "overwrite_preferences": {},
+      "add_name": "cpp_wrppr_cu",
+      "cli": false,
+      "clisub": false,
+      "py": false,
+      "package": false,
+      "f90": false,
+      "cpp": true,
+      "templates": "module-cpp",
+      "overwrite": false,
+      "backup": false
+    },
+    "API.rst": "\n.. include:: ../cuso/cpp_wrppr_cu/wrppr_cu.rst\n",
+    "cuso/__init__.py": "\ntry:\n    import cuso.wrppr_cu\nexcept ModuleNotFoundError as e:\n    # Try to build this binary extension:\n    from pathlib import Path\n    import click\n    from et_micc2.project import auto_build_binary_extension\n    msg = auto_build_binary_extension(Path(__file__).parent, 'wrppr_cu')\n    if not msg:\n        import cuso.wrppr_cu\n    else:\n        click.secho(msg, fg='bright_red')"
   }
 }
