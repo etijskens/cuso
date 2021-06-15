@@ -1,0 +1,1 @@
+void culib_add(double const* a, double const* b, double* c, size_t n);
