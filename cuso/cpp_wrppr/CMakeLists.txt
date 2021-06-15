@@ -53,7 +53,7 @@
 # Add compiler options:
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} <additional C++ compiler options>")
 # Request a specific C++ standard:
-# set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 17)
 
 # Add preprocessor macro definitions:
 # add_compile_definitions(
@@ -66,7 +66,7 @@ add_subdirectory(culib)
 
 # Add include directories
 include_directories(
-    culib
+    ../include
 )
 
 # Add link directories

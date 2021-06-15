@@ -8,9 +8,12 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
 namespace py = pybind11;
+
 #include <iostream>
 
 #include "culib/culib.hpp"
+
+#include <ArrayInfo.hpp>
 
 void
 add ( py::array_t<double> x
@@ -18,29 +21,18 @@ add ( py::array_t<double> x
     , py::array_t<double> z
     )
 {
-    auto bufx = x.request()
-       , bufy = y.request()
-       , bufz = z.request()
-       ;
-    if( bufx.ndim != 1
-     || bufy.ndim != 1
-     || bufz.ndim != 1 ) 
-    {
-        throw std::runtime_error("Number of dimensions must be one");
-    }
+    ArrayInfo<double,1> ax(x), ay(y), az(z);
 
-    if( (bufx.shape[0] != bufy.shape[0])
-     || (bufx.shape[0] != bufz.shape[0]) )
-    {
-        throw std::runtime_error("Input shapes must match");
-    }
+    ax.assert_identical_shape(ay);
+    ax.assert_identical_shape(az);
+
  // because the Numpy arrays are mutable by default, py::array_t is mutable too.
  // Below we declare the raw C++ arrays for x and y as const to make their intent clear.
-    double const *ptrx = static_cast<double const *>(bufx.ptr);
-    double const *ptry = static_cast<double const *>(bufy.ptr);
-    double       *ptrz = static_cast<double       *>(bufz.ptr);
+    double const *ptrx = ax.cdata();
+    double const *ptry = ay.cdata();
+    double       *ptrz = az. data();
 
-    size_t n = bufx.shape[0];
+    size_t n = ax.shape(0);
     // for (size_t i = 0; i < bufx.shape[0]; i++)
     //     ptrz[i] = ptrx[i] + ptry[i];
     culib_add(ptrx, ptry, ptrz, n);
